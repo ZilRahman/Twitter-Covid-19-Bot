@@ -1,5 +1,7 @@
-export class Bot {
-    public detect(name: string): string {
-        return "Bot is working"
-    }
+import { Console } from "console";
+
+const ReplyToTweet = () => {
+    console.log("")
 }
+
+export default ReplyToTweet;
