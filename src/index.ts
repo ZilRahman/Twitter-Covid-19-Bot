@@ -17,6 +17,8 @@ const start = async () => {
 
     const userClient = new TwitterApi(process.env.BEARER_TOKEN as string);
 
+    const repliedTweets: string[] = []
+
     const replyToUser = function(){
 
         return `
@@ -97,10 +99,13 @@ const start = async () => {
     stream.on(
         ETwitterStreamEvent.Data,
         async e => {
-            await writeClient.v2.reply(
-                replyToUser(),
-                e.data.id
-            )
+            if(!(e.data.id in repliedTweets)){
+                await writeClient.v2.reply(
+                    replyToUser(),
+                    e.data.id
+                )
+                repliedTweets.push(e.data.id)
+            }
         }
     );
 
