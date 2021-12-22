@@ -17,24 +17,37 @@ const start = async () => {
 
     const userClient = new TwitterApi(process.env.BEARER_TOKEN as string);
 
+    // delete rules; rules must be deleted expicitly via id["string"] when not in use
+    const deleteRules = await userClient.v2.updateStreamRules({
+        delete: {
+            // deleted rules; tools and greetings rules (test rules)
+            ids : [
+                '1473412134755205121', 
+                '1473375518535741441', 
+                '1473375518535741441',
+                '1473412134755205121',
+                '1473412734851026944',
+                '1473419267345313798',
+                '1473420793442750465',
+                '1473448045043798016', 
+                '1473450211477364742'              
+                ],
+        },
+    })
 
     // add rules
     const addedRules = await userClient.v2.updateStreamRules({
         add: [
             { 
-                value: 'covid is (fake OR a hoax OR a joke) lang:en ', 
-                tag: 'denial covid tweets',
+                value: '"covid is fake" OR "covid is a hoax" lang:en', 
+                tag: 'rule #1',
+            },
+            {
+                value: '#covidisflu OR #covidisfake OR  #covidhoax lang:en',
+                tag: 'rule #2'
             }
         ],
     });
-
-    // delete rules; rules must be deleted expicitly via id["string"] when not in use
-    const deleteRules = await userClient.v2.updateStreamRules({
-        delete: {
-            // deleted rules; tools and greetings rules (test rules)
-            ids : ['1473353750815264769', '1473354573100183554'],
-        },
-    })
 
     // console log current rules
     const rules = await userClient.v2.streamRules();
