@@ -1,4 +1,5 @@
 require('dotenv').config()
+import { resolve } from 'path/posix';
 import TwitterApi, { ETwitterStreamEvent } from 'twitter-api-v2';
 export * from "./bot";
 
@@ -17,16 +18,40 @@ const start = async () => {
 
     const userClient = new TwitterApi(process.env.BEARER_TOKEN as string);
 
+    // ID's of replied tweets users will be stored here so the bot doesn't reply twice
     const repliedTweets: string[] = []
 
+
+    // function consisting of an array of different replies to tweets
+    // returns a randomized reply from array
     const replyToUser = function(){
 
-        return `
-        Hey, below is a link to help you understand COVID-19 better:
+        let replies = [ 
+        `Hey, below is a link to help you understand COVID-19 better:
         
         World Health Organization (WHO)
-        -https://www.who.int/health-topics/coronavirus#tab=tab_1
-        `
+        -https://www.who.int/health-topics/coronavirus#tab=tab_1`,
+
+        `Hello, you can better understand COVID-19 at:
+
+        World Health Organization (WHO)
+        -https://www.who.int/health-topics/coronavirus#tab=tab_1`,
+
+        `You can understand COVID-19 better at:
+
+        World Health Organization (WHO)
+        -https://www.who.int/health-topics/coronavirus#tab=tab_1`,
+
+        `Here is some info about COVID-19:
+        Center for Disease and Prevention
+        https://www.cdc.gov/coronavirus/2019-ncov/index.html`
+        ]
+
+        // randomizes replies
+        const randomElement = replies[Math.floor(Math.random() * replies.length)];
+
+        return randomElement
+
     }
 
     // delete rules; rules must be deleted expicitly via id["string"] when not in use
@@ -97,15 +122,26 @@ const start = async () => {
     );
 
     stream.on(
+        // Emitted when a Twitter payload has to be replied 
         ETwitterStreamEvent.Data,
         async e => {
-            if(!(e.data.id in repliedTweets)){
-                await writeClient.v2.reply(
-                    replyToUser(),
-                    e.data.id
-                )
-                repliedTweets.push(e.data.id)
+
+            // replyTimer is an async function which replies to noticed tweets and and pushes
+            async function replyTimer() { 
+                if(!(e.data.id in repliedTweets)){
+
+                    await writeClient.v2.reply(
+                        replyToUser(),
+                        e.data.id
+                    )
+                repliedTweets.push(e.data.id)}
             }
+
+            // timer to wait 5 seconds using Promise.resolve()
+            await new Promise( () => {
+                setTimeout(replyTimer, 30000)
+            })
+            
         }
     );
 
@@ -114,15 +150,6 @@ const start = async () => {
 
     // Be sure to close the stream where you don't want to consume data anymore from it
     // stream.close();
-
-    // -- Alternative usage --
-
-    // You can also use async iterator to iterate over tweets!
-    // for await (const { data } of stream) {
-    // console.log('This is my tweet:', data);
-    // }
-
-    // await userClient.v2.tweet('Hello, this is a test. #2');
 }
 
 start();
