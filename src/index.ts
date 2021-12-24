@@ -28,19 +28,24 @@ const start = async () => {
 
         let replies = [ 
         `Hey, below is a link to help you understand COVID-19 better:
-        
         World Health Organization (WHO)
-        -https://www.who.int/health-topics/coronavirus#tab=tab_1`,
+        https://www.who.int/health-topics/coronavirus#tab=tab_1`,
+
+        `Here is some info about COVID-19:
+        Center for Disease and Prevention
+        https://www.cdc.gov/coronavirus/2019-ncov/index.html`,
 
         `Hello, you can better understand COVID-19 at:
-
         World Health Organization (WHO)
-        -https://www.who.int/health-topics/coronavirus#tab=tab_1`,
+        https://www.who.int/health-topics/coronavirus#tab=tab_1`,
+
+        `Here is some info about COVID-19:
+        Center for Disease and Prevention
+        https://www.cdc.gov/coronavirus/2019-ncov/index.html`,
 
         `You can understand COVID-19 better at:
-
         World Health Organization (WHO)
-        -https://www.who.int/health-topics/coronavirus#tab=tab_1`,
+        https://www.who.int/health-topics/coronavirus#tab=tab_1`,
 
         `Here is some info about COVID-19:
         Center for Disease and Prevention
@@ -77,7 +82,7 @@ const start = async () => {
     const addedRules = await userClient.v2.updateStreamRules({
         add: [
             { 
-                value: '"covid is fake" OR "covid is a hoax" OR "omicronn is a flu" lang:en', 
+                value: '-is:reply "covid is fake" OR "covid is a hoax" OR "omicronn is a flu" lang:en', 
                 tag: 'rule #1',
             },
             {
@@ -152,4 +157,8 @@ const start = async () => {
     // stream.close();
 }
 
-start();
+try {
+    start();
+} catch (error) {
+    
+}
