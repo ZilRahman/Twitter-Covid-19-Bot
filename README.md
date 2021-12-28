@@ -34,3 +34,4 @@ Improvements to be added
 * stream rules can be tweaked more for clearer tweet results
 * make bot stop replying to itself
 * re-tweet Covid-19 info to spread more awarness
+* catch and resolve any errors encountered 

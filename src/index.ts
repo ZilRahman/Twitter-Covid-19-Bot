@@ -1,7 +1,5 @@
 require('dotenv').config()
-import { resolve } from 'path/posix';
 import TwitterApi, { ETwitterStreamEvent } from 'twitter-api-v2';
-export * from "./bot";
 
 const start = async () => {
     // OAuth 1.0a (User context)
@@ -15,7 +13,7 @@ const start = async () => {
         accessSecret: process.env.ACCESS_TOKEN_SECRET,
     });
 
-
+    // create a user client to use Twitter API
     const userClient = new TwitterApi(process.env.BEARER_TOKEN as string);
 
     // ID's of replied tweets users will be stored here so the bot doesn't reply twice
@@ -102,7 +100,7 @@ const start = async () => {
     console.log(rules.data.map( rules => rules.id ));
 
 
-
+    // creates stream
     const stream = await userClient.v2.searchStream();
 
 // Awaits for a tweet
@@ -162,6 +160,7 @@ const start = async () => {
     // stream.close();
 }
 
+// TO BE IMPLEMENTED; catch errors encountered
 try {
     start();
 } catch (error) {
