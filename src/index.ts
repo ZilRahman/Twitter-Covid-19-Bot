@@ -74,6 +74,11 @@ const start = async () => {
                 '1473448045043798016', 
                 '1473450211477364742',
                 '1473452624112328704',
+                '1474157307151806465', 
+                '1473462014060101633', 
+                '1473454228521717760',
+                '1473462632808009730',
+                '1475157896467865605',
             ],
         },
     })
@@ -82,8 +87,8 @@ const start = async () => {
     const addedRules = await userClient.v2.updateStreamRules({
         add: [
             { 
-                value: '-is:reply "covid is fake" OR "covid is a hoax" OR "omicronn is a flu" lang:en', 
-                tag: 'rule #1',
+                value: '-retweets_of:CovidisReal01 -is:reply "covid is fake" OR "covid is a hoax" OR "omicronn is a flu" lang:en', 
+                tag: 'rule #1 new',
             },
             {
                 value: '#covidisflu OR #covidisfake OR  #covidhoax lang:en',
